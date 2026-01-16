@@ -56,7 +56,7 @@ int gait_index;
 int space_index;
 
 /* Initializing Bluetooth Low Energy*/
-#define BLE_UUID                  "2C2FC88C4-F244-5A80-21F1-EE0224E80658"
+#define BLE_UUID                  "2C2FC88C4-F244-5A80-21F1-TE0224E80658"
 
 BLEService MsoroService( BLE_UUID );
 BLEStringCharacteristic MsoroCharacteristic( BLE_UUID, BLERead | BLEWrite, 50 );
@@ -72,8 +72,8 @@ void setup()
   BLE.begin();
   
   // set advertised local name and service UUID:
-  BLE.setDeviceName( "Seeeduino Sense C" );
-  BLE.setLocalName( "Seeeduino Sense C" );
+  BLE.setDeviceName( "Seeeduino Sense Test" );
+  BLE.setLocalName( "Seeeduino Sense Test" );
   BLE.setAdvertisedService( MsoroService );
 
   // BLE add characteristics

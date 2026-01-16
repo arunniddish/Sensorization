@@ -24,6 +24,38 @@ img_handle = [];
 ii = 1;
 jj = 1;
 
+
+
+% BLE setup for MATLAB to Seeeduino
+
+device_name = "Seeeduino Sense Test";
+
+list_of_devices = blelist;
+
+check_device = strcmp(device_name,list_of_devices.Name);
+
+while ~any(check_device)
+    disp([device_name,"BLE device not found!!!"]);
+end
+
+disp([device_name,"BLE device found"]);
+
+
+% Connect to BLE device
+Msoro_BLE = ble(device_name);
+
+while ~ Msoro_BLE.Connected
+    disp('Still Connecting...')
+end
+
+disp('Connected Successfully');
+
+Msoro_BLE_char = characteristic(Msoro_BLE, "C2FC88C4-F244-5A80-21F1-000224E80658","C2FC88C4-F244-5A80-21F1-000224E80658");  % c = characteristic(b,serviceName,characteristicName)
+
+
+
+
+
 while true
 
     while ii == 1
