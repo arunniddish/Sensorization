@@ -72,8 +72,8 @@ void setup()
   BLE.begin();
   
   // set advertised local name and service UUID:
-  BLE.setDeviceName( "Seeeduino Sense Test" );
-  BLE.setLocalName( "Seeeduino Sense Test" );
+  BLE.setDeviceName( "Seeeduino Sense Sensor" );
+  BLE.setLocalName( "Seeeduino Sense Sensor" );
   BLE.setAdvertisedService( MsoroService );
 
   // BLE add characteristics
