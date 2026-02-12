@@ -1,6 +1,9 @@
-aa = load('flex_volt_2.csv');
+aa = load('flex_imu_list_2.csv');
 xx = 1:size(aa,1);
 xx = xx';
+
+% Normalize starting with 1
+aa = max(aa, 1);
 
 % figure;
 % plot(xx(:,1),aa(:,1));
@@ -102,7 +105,7 @@ idx_logical_2 = find(overlap_region == 1);
 
 d = diff(idx_logical_2);
 
-switch_indices = find(d>15);
+switch_indices = find(d>10);
 start_idx = 1;
 % gaits_switch = zeros(200, size(switch_indices,1)+1);
 
