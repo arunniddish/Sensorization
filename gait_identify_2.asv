@@ -1,18 +1,19 @@
 clear all;
 clc;
 
-aa = load('flex_imu_list_2.csv');
-xx = 1:size(aa,1);
+all_data = load('flex_imu_list_26.csv');
+pause(3);
+xx = 1:size(all_data,1);
 xx = xx';
 
-% Normalize starting with 1
-aa = max(aa, 1);
+% Normalize starting with 1 for all flex data
+flex_data = max(all_data(:,1:4), 1);
 
 % Four flex sensors
-flex_1 = aa(:,1);
-flex_2 = aa(:,2);
-flex_3 = aa(:,3);
-flex_4 = aa(:,4);
+flex_1 = flex_data(:,1);
+flex_2 = flex_data(:,2);
+flex_3 = flex_data(:,3);
+flex_4 = flex_data(:,4);
 
 figure;
 subplot(2,2,1)
@@ -28,10 +29,11 @@ subplot(2,2,4)
 plot(xx, flex_4(:,1), 'DisplayName','Signal')
 
 % Clear spikes and noises in peaks
-clean_data_1 = medfilt1(flex_1, 3);
-clean_data_2 = medfilt1(flex_2, 3);
-clean_data_3 = medfilt1(flex_3, 3);
-clean_data_4 = medfilt1(flex_4, 3);
+med_filt_width = 3;
+clean_data_1 = medfilt1(flex_1, med_filt_width);
+clean_data_2 = medfilt1(flex_2, med_filt_width);
+clean_data_3 = medfilt1(flex_3, med_filt_width);
+clean_data_4 = medfilt1(flex_4, med_filt_width);
 
 % Secondary filter to remove peaks
 mode_1 = mode(flex_1(flex_1>1));
@@ -63,7 +65,7 @@ subplot(2,2,4)
 plot(xx, clean_data_4_new(:,1), 'DisplayName','Signal')
 
 % Adding noise to find peaks
-r = (0.0001 + (0.0002 - 0.0001) * rand(1, size(aa,1)))';
+r = (0.0001 + (0.0002 - 0.0001) * rand(1, size(all_data,1)))';
 
 clean_data_1_new = clean_data_1_new + r;
 clean_data_2_new = clean_data_2_new + r;
@@ -132,12 +134,12 @@ limb_state_4(plocs_4) = 1;
 window_size = 5; 
 kernel = ones(window_size, 1);
 
-% smeared_1 = conv(double(limb_state_1), kernel, 'same') > 0;
+smeared_1 = conv(double(limb_state_1), kernel, 'same') > 0;
 smeared_2 = conv(double(limb_state_2), kernel, 'same') > 0;
 smeared_3 = conv(double(limb_state_3), kernel, 'same') > 0;
 smeared_4 = conv(double(limb_state_4), kernel, 'same') > 0;
 
-overlap_region = smeared_2 & smeared_3 & smeared_4;
+overlap_region = smeared_2 & smeared_3 & smeared_1;
 
 idx_logical_2 = find(overlap_region == 1);
 
@@ -159,6 +161,37 @@ for ii = 1:size(switch_indices,1)+1
 
 end
 
+% Find all pose data
+
+for ii = 1:size(gaits_switch,2)
+    imu_data{ii} = all_data(gaits_switch{1,ii}(1):gaits_switch{1,ii}(end),5:14);
+end
+
+% Calculate all average 
+
+% [1] Average change in theta's
+
+for ii = 1:size(imu_data,2)
+    diff_theta{ii} = diff(imu_data{1,ii}(:,4:6));
+    avg_diff_theta{ii} = mean(diff_theta{ii})*size(imu_data{1,ii},1);
+end
+
+% [2] Average linear acceleration
+
+for ii = 1:size(imu_data,2)
+    avg_lin_accel{ii} = mean(imu_data{1,ii}(:,1:3));
+end
+
+% Pose data
+t = 0.450;
+for ii = 1:size(gaits_switch,2)
+    body_disp(ii,:) = 0.5*[avg_lin_accel{1,ii}(1),...
+        avg_lin_accel{1,ii}(2)]*(t)^2;
+end
+
+
+
+%%
 other_data = aa(203:219,5:14);
 
 % Z - gives the orientation of the robot. (Yaw)
@@ -216,7 +249,10 @@ for ii = 1:size(gaits_switch,2)
     end
 end
             
-        
+
+
+
+
         
            
         
