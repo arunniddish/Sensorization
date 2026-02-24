@@ -112,10 +112,7 @@ void setup() {
 
   // start advertising
   BLE.advertise();
-
-      cycle_through_states(cycle1, cycle1_size);
-      cycle_through_states(cycle2, cycle2_size);    
-      cycle_through_states(cycle3, cycle3_size);
+  
 }
 
 
