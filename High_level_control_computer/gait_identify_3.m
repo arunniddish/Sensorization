@@ -1,7 +1,7 @@
 clear all;
 clc;
 
-all_data = load('flex_imu_list_26.csv');
+all_data = load('Euler_1_new.csv');
 pause(3);
 xx = 1:size(all_data,1);
 xx = xx';
@@ -175,7 +175,7 @@ for nn = 1:size(gaits_switch,1)
             gaits_switch{nn,mm} = [];
         end
 
-        if size(gaits_switch{nn,mm},1) < 8
+        if size(gaits_switch{nn,mm},1) < 4
             gaits_switch{nn,mm} = [];
         end
     end
@@ -195,7 +195,8 @@ for ii = 1:size(gaits_switch,1)
     % If the row is fully empty, C_new(i,:) stays as {} which is equivalent to []
 end
 
-state_order = repmat([5,15,1],1,20);
+% state_order = repmat([5,15,1],1,20);
+
 state_index = zeros(1,16);
 
 for ii = 1:size(state_order,2)

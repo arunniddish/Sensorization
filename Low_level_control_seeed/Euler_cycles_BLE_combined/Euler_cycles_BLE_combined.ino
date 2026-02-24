@@ -255,3 +255,75 @@ String BLE_read()
   Msoro_cmd = Msoro_cmd.substring(space_index+1);
   return BLE_read_string;
 }
+
+/* This function takes input for defining the gait types. 
+ *  Example A = [2,3,5,9];
+ *  "define A 2 3 5 9 end " - Leave a space after the 'end'
+ */
+void define_cycle(){
+  gait_name = BLE_read();
+  gait_index = gaits.indexOf(gait_name);
+  Serial.print("The index is ");
+  Serial.println(gait_index);
+  gait_value = "exist"; /* Initially the gait value exists which is sent from MATLAB*/
+  int i = 0;
+  while(space_index != -1) {
+    gait_value = BLE_read();
+    gait_value_int = gait_value.toInt();
+    if(gait_value != "end" && gait_value_int != 0 ) {
+      cycle[gait_index][i] = (int8_t)gait_value_int;
+      Serial.println(cycle[gait_index][i]);
+      i = i+1;  
+    }  
+    size_gait[gait_index] = i;
+  }
+       
+  Serial.println("#Defined"); /* This is printed so that Matlab can read it from Serial port for acknowledging that gait defining process 
+                                     has been completed*/   
+}
+
+
+/*
+ * For the given definition of gaits type, this function performs the execution of the gait and number of times it needs to be performed.
+ * Example: "start A 12" - Performs gait A for 12 times. Do not leave a space after the '12'.
+ */
+void start_cycle()
+{
+  gait_name = BLE_read();
+  gait_index = gaits.indexOf(gait_name);
+  for(int j = 0;j<size_gait[gait_index];j++){
+     cycle_gait[j] = cycle[gait_index][j];
+  } 
+    
+  int num_cycles = BLE_read().toInt();
+  //while (Serial.available()>0){
+  //  cmd = serial_read();
+  //  if (cmd == "end"){}
+  //}
+  for (int k=0; k<num_cycles ; k++){
+    //if (Serial.available() > 4) {
+      if (MsoroCharacteristic.written()) {
+      cmd = BLE_read();
+      cmd.trim();
+      if (cmd == "stop" ){
+        Serial.print ("#Stopped Gait ");
+        Serial.println(gaits.charAt(gait_index));
+        break;
+      }
+    }
+    cycle_through_states(cycle_gait, size_gait[gait_index]);
+    Serial.print("#Completed ");
+    Serial.print(k+1);
+    Serial.print("/");
+    Serial.print(num_cycles);
+    Serial.println(" times");
+  } 
+  if (cmd != "stop" ) {
+    Serial.print("#Completed Gait ");
+    Serial.print(gaits.charAt(gait_index));
+    Serial.print(" ");
+    Serial.print(num_cycles);
+    Serial.println(" times");
+  }
+}
+
