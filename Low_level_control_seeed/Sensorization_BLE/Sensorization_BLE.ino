@@ -22,7 +22,7 @@
 
 /* User-defined parameters */
 //const int8_t motor[] ={2,3,5,6,9,10,11,12};      // motor pins on Arduino
-const int8_t motor[] ={1,0,3,2,5,6,10,9};      // motor pins on Arduino Xiao changing motor polarity from default above for some motors
+const int8_t motor[] = {1,0,3,2,5,6,10,9};      // motor pins on Arduino Xiao changing motor polarity from default above for some motors
 const int T_transition = 450;    // total transition time constant in ms.
 const int T_unspool = 50;        // motor unspooling time constant in ms.
 bool display_states = false;     // flag to print all robot states

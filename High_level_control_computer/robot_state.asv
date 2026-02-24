@@ -48,7 +48,7 @@ switch state_val
         overlap_region = (limb_A == 1) & (limb_B == 1) & (limb_C == 1) & (limb_D == 0);
 
     case 16
-        overlap_region = (limb_A == 1) & (limb_B == 1) & (limb_C == 1) & (limb_D == 1);
+        overlap_region = (limb_A == 1) & (limb_B == 1) & (limb_C == 1) & (limb_D == 0);
 
     otherwise
         disp('Invalid robot state');
