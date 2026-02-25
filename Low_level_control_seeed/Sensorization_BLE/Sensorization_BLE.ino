@@ -39,6 +39,7 @@ int state_matrix[number_of_motors][number_of_states] = { };
 /* Use booleans to avoid excessive / unwanted motor unspooling. */
 bool just_curled[number_of_motors] = { };
 bool just_relaxed[number_of_motors] = { };
+
 /* Serial communication variables */
 String cmd;
 String ser_read_string;

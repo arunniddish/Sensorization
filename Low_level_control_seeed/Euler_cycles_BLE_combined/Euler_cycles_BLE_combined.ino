@@ -85,7 +85,15 @@ const int8_t cycle15_size = sizeof(cycle15);
 String cmd;
 String ser_read_string;
 String BLE_read_string;
+/* Gait information variables */
+int8_t cycle[20][20];     // matrix to store all gait definitions (max 20 gaits of length 20)
+int8_t cycle_gait[20];
+String gait_name;
+String gait_value;
 String Msoro_cmd = "";
+int gait_value_int;
+int size_gait[20];
+String gaits = "ABCDEFGHIJKLMNOP";
 int gait_index;
 int space_index;
 
@@ -175,6 +183,15 @@ void loop()
           cycle_through_states(cycle14, cycle14_size);    
           cycle_through_states(cycle15, cycle15_size);
         }
+        if (cmd == "define")
+        {
+          define_cycle();
+        }
+        if (cmd == "start")
+        {
+          start_cycle();
+        }
+
       }
     }
   }
