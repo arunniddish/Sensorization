@@ -81,6 +81,14 @@ const int8_t cycle13_size = sizeof(cycle13);
 const int8_t cycle14_size = sizeof(cycle14);
 const int8_t cycle15_size = sizeof(cycle15);
 
+/* Serial communication variables */
+String cmd;
+String ser_read_string;
+String BLE_read_string;
+String Msoro_cmd = "";
+int gait_index;
+int space_index;
+
 /* Initializing Bluetooth Low Energy*/
 #define BLE_UUID                  "2C2FC88C4-F244-5A80-21F1-TE0224E80658"
 
