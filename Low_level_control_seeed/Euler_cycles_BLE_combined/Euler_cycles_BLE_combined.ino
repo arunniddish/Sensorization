@@ -21,7 +21,9 @@
 /* User-defined parameters */
 //const int8_t motor[] ={2,3,5,6,9,10,11,12};      // motor pins on Arduino
 const int8_t motor[] ={1,0,3,2,5,6,10,9};      // motor pins on Arduino Xiao changing motor polarity from default above for some motors
-const int T_transition = 450;    // total transition time constant in ms.
+
+//const int T_transition = 450;    // total transition time constant in ms.
+int T_transition = 450;    // total transition time constant in ms.
 const int T_unspool = 50;        // motor unspooling time constant in ms.
 
 // Euler cycle 1 
@@ -98,7 +100,7 @@ int gait_index;
 int space_index;
 
 /* Initializing Bluetooth Low Energy*/
-#define BLE_UUID                  "2C2FC88C4-F244-5A80-21F1-TE0224E80658"
+#define BLE_UUID                  "2C2FC88C4-F244-5A80-21F1-TE0224E80659"
 
 BLEService MsoroService( BLE_UUID );
 BLEStringCharacteristic MsoroCharacteristic( BLE_UUID, BLERead | BLEWrite, 50 );
@@ -113,8 +115,8 @@ void setup() {
   BLE.begin();
   
   // set advertised local name and service UUID:
-  BLE.setDeviceName( "Seeeduino Sense Sensor" );
-  BLE.setLocalName( "Seeeduino Sense Sensor" );
+  BLE.setDeviceName( "XIAO - STerreSoRo" );
+  BLE.setLocalName( "XIAO - STerreSoRo" );
   BLE.setAdvertisedService( MsoroService );
 
   // BLE add characteristics
@@ -191,7 +193,30 @@ void loop()
         {
           start_cycle();
         }
-
+        if (cmd == "T0")
+        {
+          T_transition = 450;
+        }
+        if (cmd == "T1")
+        {
+          T_transition = 550;
+        }
+        if (cmd == "T2")
+        {
+          T_transition = 650;
+        }
+        if (cmd == "T3")
+        {
+          T_transition = 750;
+        }
+        if (cmd == "T4")
+        {
+          T_transition = 850;
+        }
+        if (cmd == "T5")
+        {
+          T_transition = 950;
+        }
       }
     }
   }

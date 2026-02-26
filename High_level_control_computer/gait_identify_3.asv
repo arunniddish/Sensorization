@@ -198,7 +198,7 @@ end
 
 % state_order = repmat([5,15,1],1,20);
 state_order = load('state_order_3.mat');
-%%
+
 state_index = zeros(1,16);
 
 for ii = 1:size(state_order,2)
