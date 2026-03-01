@@ -7,8 +7,8 @@ xx = 1:size(all_data,1);
 xx = xx';
 
 % Normalize starting with 1 for all flex data
-% flex_data = max(all_data(:,1:4), 1);
-flex_data = all_data(:,1:4);
+flex_data = max(all_data(:,1:4), 1);
+% flex_data = all_data(:,1:4);
 
 % Four flex sensors
 flex_1 = flex_data(:,1);
@@ -30,48 +30,75 @@ subplot(4,1,4)
 plot(xx, flex_4(:,1), 'DisplayName','Signal')
 
 % Clear spikes and noises in peaks
-med_filt_width = 3;
-clean_data_1 = medfilt1(flex_1, med_filt_width);
-clean_data_2 = medfilt1(flex_2, med_filt_width);
-clean_data_3 = medfilt1(flex_3, med_filt_width);
-clean_data_4 = medfilt1(flex_4, med_filt_width);
-
-% Secondary filter to remove peaks
-mode_1 = mode(flex_1(flex_1>1));
-mode_2 = mode(flex_2(flex_2>1));
-mode_3 = mode(flex_3(flex_3>1));
-mode_4 = mode(flex_4(flex_4>1));
-
-clean_data_1_new = min(clean_data_1, mode_1);
-clean_data_2_new = min(clean_data_2, mode_2);
-clean_data_3_new = min(clean_data_3, mode_3);
-clean_data_4_new = min(clean_data_4, mode_4);
-
-range_flex_1 = max(clean_data_1_new) - min(clean_data_1_new);
-range_flex_2 = max(clean_data_2_new) - min(clean_data_2_new);
-range_flex_3 = max(clean_data_3_new) - min(clean_data_3_new);
-range_flex_4 = max(clean_data_4_new) - min(clean_data_4_new);
+med_filt_width = 20;
+clean_data_1 = medfilt1(flex_1, med_filt_width,'truncate');
+clean_data_2 = medfilt1(flex_2, med_filt_width,'truncate');
+clean_data_3 = medfilt1(flex_3, med_filt_width,'truncate');
+clean_data_4 = medfilt1(flex_4, med_filt_width,'truncate');
 
 figure;
 subplot(4,1,1)
-plot(xx, clean_data_1_new(:,1), 'DisplayName','Signal')
+plot(xx, clean_data_1(:,1), 'DisplayName','Signal')
 
 subplot(4,1,2)
-plot(xx, clean_data_2_new(:,1), 'DisplayName','Signal')
+plot(xx, clean_data_2(:,1), 'DisplayName','Signal')
 
 subplot(4,1,3)
-plot(xx, clean_data_3_new(:,1), 'DisplayName','Signal')
+plot(xx, clean_data_3(:,1), 'DisplayName','Signal')
 
 subplot(4,1,4)
-plot(xx, clean_data_4_new(:,1), 'DisplayName','Signal')
+plot(xx, clean_data_4(:,1), 'DisplayName','Signal')
+
+% % Secondary filter to remove peaks
+% mode_1 = mode(flex_1(flex_1>1));
+% mode_2 = mode(flex_2(flex_2>1));
+% mode_3 = mode(flex_3(flex_3>1));
+% mode_4 = mode(flex_4(flex_4>1));
+% 
+% clean_data_1_new = min(clean_data_1, mode_1);
+% clean_data_2_new = min(clean_data_2, mode_2);
+% clean_data_3_new = min(clean_data_3, mode_3);
+% clean_data_4_new = min(clean_data_4, mode_4);
+
+% figure;
+% subplot(4,1,1)
+% plot(xx, clean_data_1_new(:,1), 'DisplayName','Signal')
+% 
+% subplot(4,1,2)
+% plot(xx, clean_data_2_new(:,1), 'DisplayName','Signal')
+% 
+% subplot(4,1,3)
+% plot(xx, clean_data_3_new(:,1), 'DisplayName','Signal')
+% 
+% subplot(4,1,4)
+% plot(xx, clean_data_4_new(:,1), 'DisplayName','Signal')
+
+% % Range of flex sensor 1 - 4
+% 
+% range_flex_1 = max(clean_data_1_new) - min(clean_data_1_new);
+% range_flex_2 = max(clean_data_2_new) - min(clean_data_2_new);
+% range_flex_3 = max(clean_data_3_new) - min(clean_data_3_new);
+% range_flex_4 = max(clean_data_4_new) - min(clean_data_4_new);
+
+% Range of flex sensor 1 - 4
+
+range_flex_1 = max(clean_data_1) - min(clean_data_1);
+range_flex_2 = max(clean_data_2) - min(clean_data_2);
+range_flex_3 = max(clean_data_3) - min(clean_data_3);
+range_flex_4 = max(clean_data_4) - min(clean_data_4);
 
 % Adding noise to find peaks
-r = (0.0001 + (0.0002 - 0.0001) * rand(1, size(all_data,1)))';
+r = (0.0001 + (0.003 - 0.001) * rand(1, size(all_data,1)))';
+% 
+% clean_data_1_new = clean_data_1_new + r;
+% clean_data_2_new = clean_data_2_new + r;
+% clean_data_3_new = clean_data_3_new + r;
+% clean_data_4_new = clean_data_4_new + r;
 
-clean_data_1_new = clean_data_1_new + r;
-clean_data_2_new = clean_data_2_new + r;
-clean_data_3_new = clean_data_3_new + r;
-clean_data_4_new = clean_data_4_new + r;
+clean_data_1_new = clean_data_1 + r;
+clean_data_2_new = clean_data_2 + r;
+clean_data_3_new = clean_data_3 + r;
+clean_data_4_new = clean_data_4 + r;
 
 figure;
 subplot(4,1,1)
@@ -88,10 +115,10 @@ plot(xx, clean_data_4_new(:,1), 'DisplayName','Signal')
 
 % Peaks
 
-threshold_1 = max(clean_data_1_new) - (3/5)*range_flex_1;
-threshold_2 = max(clean_data_2_new) - (3/5)*range_flex_2;
-threshold_3 = max(clean_data_3_new) - (3/5)*range_flex_3;
-threshold_4 = max(clean_data_4_new) - (3/5)*range_flex_4;
+threshold_1 = max(clean_data_1_new) - 0.92*range_flex_1;
+threshold_2 = max(clean_data_2_new) - 0.92*range_flex_2;
+threshold_3 = max(clean_data_3_new) - 0.92*range_flex_3;
+threshold_4 = max(clean_data_4_new) - 0.83*range_flex_4;
 
 [pks_1,plocs_1] = findpeaks(clean_data_1_new,"MinPeakHeight",threshold_1);
 [pks_2,plocs_2] = findpeaks(clean_data_2_new,"MinPeakHeight",threshold_2);
@@ -99,22 +126,22 @@ threshold_4 = max(clean_data_4_new) - (3/5)*range_flex_4;
 [pks_4,plocs_4] = findpeaks(clean_data_4_new,"MinPeakHeight",threshold_4);
 
 figure;
-subplot(2,2,1)
+subplot(4,1,1)
 plot(xx, clean_data_1_new(:,1), 'DisplayName','Signal')
 hold on
 plot(xx(plocs_1), pks_1, '^r', 'DisplayName','Peaks')
 
-subplot(2,2,2)
+subplot(4,1,2)
 plot(xx, clean_data_2_new(:,1), 'DisplayName','Signal')
 hold on
 plot(xx(plocs_2), pks_2, '^r', 'DisplayName','Peaks')
 
-subplot(2,2,3)
+subplot(4,1,3)
 plot(xx, clean_data_3_new(:,1), 'DisplayName','Signal')
 hold on
 plot(xx(plocs_3), pks_3, '^r', 'DisplayName','Peaks')
 
-subplot(2,2,4)
+subplot(4,1,4)
 plot(xx, clean_data_4_new(:,1), 'DisplayName','Signal')
 hold on
 plot(xx(plocs_4), pks_4, '^r', 'DisplayName','Peaks')
@@ -176,7 +203,7 @@ for nn = 1:size(gaits_switch,1)
             gaits_switch{nn,mm} = [];
         end
 
-        if size(gaits_switch{nn,mm},1) < 2
+        if size(gaits_switch{nn,mm},1) < 11
             gaits_switch{nn,mm} = [];
         end
     end

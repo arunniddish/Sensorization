@@ -12,7 +12,7 @@ switch state_val
         overlap_region = (limb_A == 0) & (limb_B == 0) & (limb_C == 1) & (limb_D == 0);
 
     case 4
-        overlap_region = (limb_A == 0) & (limb_B == 1) & (limb_C == 1) & (limb_D == 0);
+        overlap_region = (limb_A == 0) & (limb_B == 0) & (limb_C == 1) & (limb_D == 1);
 
     case 5
         overlap_region = (limb_A == 0) & (limb_B == 1) & (limb_C == 0) & (limb_D == 0);

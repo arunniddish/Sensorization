@@ -1,7 +1,7 @@
 clear all;
 clc;
 addpath('../');
-all_data = load('Euler_1_new_2.csv');
+all_data = load('Test_16_1_1.csv');
 pause(3);
 xx = 1:size(all_data,1);
 xx = xx';
@@ -36,6 +36,19 @@ clean_data_2 = medfilt1(flex_2, med_filt_width);
 clean_data_3 = medfilt1(flex_3, med_filt_width);
 clean_data_4 = medfilt1(flex_4, med_filt_width);
 
+figure;
+subplot(4,1,1)
+plot(xx, clean_data_1(:,1), 'DisplayName','Signal')
+
+subplot(4,1,2)
+plot(xx, clean_data_2(:,1), 'DisplayName','Signal')
+
+subplot(4,1,3)
+plot(xx, clean_data_3(:,1), 'DisplayName','Signal')
+
+subplot(4,1,4)
+plot(xx, clean_data_4(:,1), 'DisplayName','Signal')
+
 % Secondary filter to remove peaks
 mode_1 = mode(flex_1(flex_1>1));
 mode_2 = mode(flex_2(flex_2>1));
@@ -47,23 +60,25 @@ clean_data_2_new = min(clean_data_2, mode_2);
 clean_data_3_new = min(clean_data_3, mode_3);
 clean_data_4_new = min(clean_data_4, mode_4);
 
+figure;
+subplot(4,1,1)
+plot(xx, clean_data_1_new(:,1), 'DisplayName','Signal')
+
+subplot(4,1,2)
+plot(xx, clean_data_2_new(:,1), 'DisplayName','Signal')
+
+subplot(4,1,3)
+plot(xx, clean_data_3_new(:,1), 'DisplayName','Signal')
+
+subplot(4,1,4)
+plot(xx, clean_data_4_new(:,1), 'DisplayName','Signal')
+
+% Range of flex sensor 1 - 4
+
 range_flex_1 = max(clean_data_1_new) - min(clean_data_1_new);
 range_flex_2 = max(clean_data_2_new) - min(clean_data_2_new);
 range_flex_3 = max(clean_data_3_new) - min(clean_data_3_new);
 range_flex_4 = max(clean_data_4_new) - min(clean_data_4_new);
-
-figure;
-subplot(2,2,1)
-plot(xx, clean_data_1_new(:,1), 'DisplayName','Signal')
-
-subplot(2,2,2)
-plot(xx, clean_data_2_new(:,1), 'DisplayName','Signal')
-
-subplot(2,2,3)
-plot(xx, clean_data_3_new(:,1), 'DisplayName','Signal')
-
-subplot(2,2,4)
-plot(xx, clean_data_4_new(:,1), 'DisplayName','Signal')
 
 % Adding noise to find peaks
 r = (0.0001 + (0.0002 - 0.0001) * rand(1, size(all_data,1)))';
@@ -74,16 +89,16 @@ clean_data_3_new = clean_data_3_new + r;
 clean_data_4_new = clean_data_4_new + r;
 
 figure;
-subplot(2,2,1)
+subplot(4,1,1)
 plot(xx, clean_data_1_new(:,1), 'DisplayName','Signal')
 
-subplot(2,2,2)
+subplot(4,1,2)
 plot(xx, clean_data_2_new(:,1), 'DisplayName','Signal')
 
-subplot(2,2,3)
+subplot(4,1,3)
 plot(xx, clean_data_3_new(:,1), 'DisplayName','Signal')
 
-subplot(2,2,4)
+subplot(4,1,4)
 plot(xx, clean_data_4_new(:,1), 'DisplayName','Signal')
 
 % Peaks
